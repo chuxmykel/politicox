@@ -1,0 +1,45 @@
+{
+  "name": "politicox",
+  "version": "1.0.0",
+  "description": "An attempt at building a better politico app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf build && mkdir build",
+    "build-server": "babel -d ./build ./server",
+    "build": "npm run clean && npm run build-server",
+    "start": "node ./build/server.js",
+    "start:dev": "babel-node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chuxmykel/politicox.git"
+  },
+  "keywords": [
+    "politico",
+    "API",
+    "andela",
+    "postgresql",
+    "nodejs",
+    "express"
+  ],
+  "author": "Chukwudi Ngwobia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chuxmykel/politicox/issues"
+  },
+  "homepage": "https://github.com/chuxmykel/politicox#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "express": "^4.16.4",
+    "mocha": "^5.2.0"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.14.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
