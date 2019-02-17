@@ -9,10 +9,34 @@ chai.should();
 
 chai.use(chaiHttp);
 
-const partyEndPoint = '/api/v1/parties/';
-const officeEndPoint = '/api/v1/offices/';
+const homeEndPoint = '/';
+const apiEndPoint = '/api/v1/';
+const partyEndPoint = `${apiEndPoint}parties/`;
+const officeEndPoint = `${apiEndPoint}offices/`;
 
-describe('Party Tests', () => {
+describe('Home Routes', () => {
+  describe(`GET ${homeEndPoint}`, () => {
+    it('Should have status 200', () => {
+      chai.request(server)
+        .get(homeEndPoint)
+        .end((err, res) => {
+          res.should.have.status(200);
+        });
+    });
+  });
+
+  describe(`GET ${apiEndPoint}`, () => {
+    it('Should have status 200', () => {
+      chai.request(server)
+        .get(apiEndPoint)
+        .end((err, res) => {
+          res.should.have.status(200);
+        });
+    });
+  });
+});
+
+describe('Party Routes', () => {
   describe(`POST ${partyEndPoint}`, () => {
     it('Should return 201 if party creation works', (done) => {
       const party = {
