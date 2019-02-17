@@ -1,4 +1,5 @@
 import express from 'express';
+import InputValidator from '../middleware/inputValidator';
 import PartyController from '../controllers/partyController';
 
 const router = express.Router();
@@ -12,6 +13,6 @@ router.get(homeEndPoint, (req, res) => res.status(200).redirect(apiEndPoint));
 router.get(apiEndPoint, (req, res) => res.status(200).send('Welcome to politicox'));
 
 // Party
-router.post(partyEndPoint, PartyController.addParty);
+router.post(partyEndPoint, InputValidator.validateParty, PartyController.addParty);
 
 export default router;

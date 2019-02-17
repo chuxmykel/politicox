@@ -10,4 +10,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(router);
 
-module.exports = app.listen(port);
+app.listen(port);
+
+export default app;
