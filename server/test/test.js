@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import parties from '../app/model/parties';
-import offices from '../app/model/offices';
 import server from '../server';
 
 chai.should();
@@ -40,7 +38,6 @@ describe('Party Routes', () => {
   describe(`POST ${partyEndPoint}`, () => {
     it('Should return 201 if party creation works', (done) => {
       const party = {
-        id: parties.length + 1,
         name: 'WAP',
         hqAddress: 'Lagos Nigeria',
         logoUrl: 'http://www.andelatest.com',
@@ -55,7 +52,6 @@ describe('Party Routes', () => {
     });
     it('Should return 400 if name is missing', (done) => {
       const party = {
-        id: parties.length + 1,
         hqAddress: 'Lagos Nigeria',
         logoUrl: 'http://www.andelatest.com',
       };
@@ -69,7 +65,6 @@ describe('Party Routes', () => {
     });
     it('Should return 400 if hqAddress is missing', (done) => {
       const party = {
-        id: parties.length + 1,
         name: 'WAP',
         logoUrl: 'http://www.andelatest.com',
       };
@@ -185,7 +180,6 @@ describe('Office Tests', () => {
   describe(`POST ${officeEndPoint}`, () => {
     it('Should return 201 if office creation works', (done) => {
       const office = {
-        id: offices.length + 1,
         type: 'Students Union Government',
         name: 'Presidential',
       };
@@ -200,7 +194,6 @@ describe('Office Tests', () => {
 
     it('Should return 400 if type is missing', (done) => {
       const office = {
-        id: offices.length + 1,
         name: 'Presidential',
       };
       chai.request(server)
@@ -214,7 +207,6 @@ describe('Office Tests', () => {
 
     it('Should return 400 if name is missing', (done) => {
       const office = {
-        id: offices.length + 1,
         type: 'Students Union Government',
       };
       chai.request(server)

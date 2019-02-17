@@ -1,8 +1,19 @@
 /* eslint-disable class-methods-use-this */
-/* eslint-disable require-jsdoc */
 import parties from '../model/parties';
 
+/**
+ * @class PartyController
+ * @description Contains methods for each party related endpoint
+ * @exports partyController
+ */
 class PartyController {
+  /**
+  * @method addParty
+  * @description Adds a party to the data structure if the input is valid
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @returns {object} JSON API Response
+  */
   addParty(req, res) {
     const party = { id: parties.length + 1, ...req.body };
 
