@@ -9,7 +9,8 @@
     "build-server": "babel -d ./build ./server",
     "build": "npm run clean && npm run build-server",
     "start": "node ./build/server.js",
-    "start:dev": "babel-node server/server.js"
+    "start:dev": "npm run build && npm run start",
+    "dev": "nodemon --exec babel-node server/server.js"
   },
   "repository": {
     "type": "git",
@@ -37,10 +38,10 @@
     "mocha": "^5.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.3",
-    "@babel/preset-env": "^7.3.1",
+    "@babel/core": "^7.0.0",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "babel-preset-env": "^1.7.0",
     "eslint": "^5.14.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0"
