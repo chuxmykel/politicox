@@ -55,6 +55,26 @@ class PartyController {
       data: parties[partyIndex],
     });
   }
+
+  /**
+  * @method editParty
+  * @description Edits a party
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @returns {object} JSON API Response
+  */
+  editParty(req, res) {
+    const partyIndex = parseInt(req.params.id, 10) - 1;
+    parties[partyIndex].name = req.body.name;
+
+    return res.status(200).send({
+      status: 200,
+      data: [{
+        id: parties[partyIndex].id,
+        name: parties[partyIndex].name,
+      }],
+    });
+  }
 }
 
 const partyController = new PartyController();

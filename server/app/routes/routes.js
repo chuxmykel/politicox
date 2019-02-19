@@ -16,5 +16,8 @@ router.get(apiEndPoint, (req, res) => res.status(200).send('Welcome to politicox
 router.post(partyEndPoint, InputValidator.validatePartyBody, PartyController.addParty);
 router.get(partyEndPoint, PartyController.getAllParties);
 router.get(`${partyEndPoint}:id`, InputValidator.validatePartyParams, PartyController.getSpecificParty);
+router.patch(`${partyEndPoint}:id/name`,
+  InputValidator.validatePartyParams,
+  InputValidator.validatePartyBody, PartyController.editParty);
 
 export default router;

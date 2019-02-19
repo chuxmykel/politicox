@@ -17,7 +17,8 @@ class InputValidator {
   */
   validatePartyBody(req, res, next) {
     const newParty = { ...req.body };
-    const validate = Schema.partySchema(newParty);
+    const validate = req.method === 'POST' ? Schema.createPartySchema(newParty)
+      : Schema.editPartySchema(newParty);
     const { error } = validate;
     let nameExists = false;
 
