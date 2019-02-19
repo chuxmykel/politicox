@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../server';
@@ -115,7 +114,7 @@ describe('Party Routes', () => {
     });
 
     it('Should have 404 as status code if party not found', (done) => {
-      const id = 3;
+      const id = 100;
       chai.request(server)
         .get(`${partyEndPoint}${id}`)
         .end((err, res) => {

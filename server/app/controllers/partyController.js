@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import parties from '../model/parties';
 
 /**
@@ -38,6 +37,22 @@ class PartyController {
     return res.status(200).send({
       status: 201,
       data: parties,
+    });
+  }
+
+  /**
+  * @method getSpecificParty
+  * @description Gets a specified party
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @returns {object} JSON API Response
+  */
+  getSpecificParty(req, res) {
+    const partyIndex = parseInt(req.params.id, 10) - 1;
+
+    return res.status(200).send({
+      status: 201,
+      data: parties[partyIndex],
     });
   }
 }
