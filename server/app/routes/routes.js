@@ -19,5 +19,6 @@ router.get(`${partyEndPoint}:id`, InputValidator.validatePartyParams, PartyContr
 router.patch(`${partyEndPoint}:id/name`,
   InputValidator.validatePartyParams,
   InputValidator.validatePartyBody, PartyController.editParty);
+router.delete(`${partyEndPoint}:id`, InputValidator.validatePartyParams, PartyController.deleteParty);
 
 export default router;
