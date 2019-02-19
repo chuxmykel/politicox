@@ -255,7 +255,7 @@ describe('Office Tests', () => {
     });
 
     it('Should have 404 as status code if office not found', (done) => {
-      const id = 3;
+      const id = 50;
       chai.request(server)
         .get(`${officeEndPoint}${id}`)
         .end((err, res) => {
