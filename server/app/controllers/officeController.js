@@ -38,6 +38,22 @@ class OfficeController {
       data: offices,
     });
   }
+
+  /**
+  * @method getSpecificOffice
+  * @description Gets a specified Office
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @returns {object} JSON API Response
+  */
+  getSpecificOffice(req, res) {
+    const officeIndex = parseInt(req.params.id, 10) - 1;
+
+    return res.status(200).send({
+      status: 201,
+      data: offices[officeIndex],
+    });
+  }
 }
 
 const officeController = new OfficeController();

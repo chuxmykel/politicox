@@ -45,7 +45,7 @@ class InputValidator {
 
   /**
   * @method validatePartyParams
-  * @description Validates the parameters passed in from the request object
+  * @description Validates the party parameters passed in from the request object
   * @param {object} req - The Request Object
   * @param {object} res - The Response Object
   * @param {function} next - The next function to point to the next middleware
@@ -97,6 +97,31 @@ class InputValidator {
       return res.status(400).send({
         status: 400,
         error: error.details[0].message,
+      });
+    }
+    return next();
+  }
+
+  /**
+  * @method validateOfficeParams
+  * @description Validates the office parameters passed in from the request object
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @param {function} next - The next function to point to the next middleware
+  * @returns {function} next() - The next function
+  */
+  validateOfficeParams(req, res, next) {
+    let idExists = false;
+    const id = parseInt(req.params.id, 10);
+
+    offices.forEach((office) => {
+      if (office.id === id) { idExists = true; }
+    });
+
+    if (!idExists) {
+      return res.status(404).send({
+        status: 404,
+        error: `Office with id: ${req.params.id} does not exist`,
       });
     }
     return next();
