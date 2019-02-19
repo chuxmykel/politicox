@@ -17,7 +17,8 @@ class Schema {
     const schema = {
       name: Joi.string().min(2).max(20).required()
         .regex(/^[a-zA-Z]+$/),
-      hqAddress: Joi.string().min(3).max(100).required(),
+      hqAddress: Joi.string().min(3).max(100).required()
+        .regex(/^[a-zA-Z0-9]+[a-zA-Z0-9\s',."'()-]+$/),
       logoUrl: Joi.string().min(5).max(200).optional(),
     };
     return Joi.validate(party, schema);

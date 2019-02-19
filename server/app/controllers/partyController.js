@@ -17,20 +17,6 @@ class PartyController {
   addParty(req, res) {
     const party = { id: parties.length + 1, ...req.body };
 
-    if (!party.name) {
-      return res.status(400).send({
-        status: 400,
-        error: 'Party name is required',
-      });
-    }
-
-    if (!party.hqAddress) {
-      return res.status(400).send({
-        status: 400,
-        error: 'HQ address is required',
-      });
-    }
-
     parties.push(party);
     return res.status(201).send({
       status: 201,
@@ -38,6 +24,20 @@ class PartyController {
         id: party.id,
         name: party.name,
       }],
+    });
+  }
+
+  /**
+  * @method getAllParties
+  * @description Gets all the parties
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @returns {object} JSON API Response
+  */
+  getAllParties(req, res) {
+    return res.status(200).send({
+      status: 201,
+      data: parties,
     });
   }
 }
