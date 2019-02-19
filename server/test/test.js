@@ -38,7 +38,7 @@ describe('Party Routes', () => {
   describe(`POST ${partyEndPoint}`, () => {
     it('Should return 201 if party creation works', (done) => {
       const party = {
-        name: 'WAP',
+        name: 'QWERTYUIOP',
         hqAddress: 'Lagos Nigeria',
         logoUrl: 'http://www.andelatest.com',
       };
@@ -47,6 +47,20 @@ describe('Party Routes', () => {
         .send(party)
         .end((err, res) => {
           res.should.have.status(201);
+          done();
+        });
+    });
+    it('Should return 400 if name already exists', (done) => {
+      const party = {
+        name: 'QWERTYUIOP',
+        hqAddress: 'Lagos Nigeria',
+        logoUrl: 'http://www.andelatest.com',
+      };
+      chai.request(server)
+        .post(partyEndPoint)
+        .send(party)
+        .end((err, res) => {
+          res.should.have.status(400);
           done();
         });
     });
