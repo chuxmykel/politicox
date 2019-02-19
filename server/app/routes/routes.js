@@ -25,5 +25,6 @@ router.delete(`${partyEndPoint}:id`, InputValidator.validatePartyParams, PartyCo
 
 // Office
 router.post(officeEndPoint, InputValidator.validateOfficeBody, OfficeController.addOffice);
+router.get(officeEndPoint, OfficeController.getAllOffices);
 
 export default router;
