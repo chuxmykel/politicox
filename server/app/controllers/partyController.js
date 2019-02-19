@@ -8,13 +8,13 @@ import parties from '../model/parties';
 class PartyController {
   /**
   * @method addParty
-  * @description Adds a party to the data structure if the input is valid
+  * @description Adds a party to the data structure
   * @param {object} req - The Request Object
   * @param {object} res - The Response Object
   * @returns {object} JSON API Response
   */
   addParty(req, res) {
-    const party = { id: parties.length + 1, ...req.body };
+    const party = { id: parties[parties.length - 1].id + 1, ...req.body };
 
     parties.push(party);
     return res.status(201).send({
@@ -72,6 +72,31 @@ class PartyController {
       data: [{
         id: parties[partyIndex].id,
         name: parties[partyIndex].name,
+      }],
+    });
+  }
+
+  /**
+  * @method deleteParty
+  * @description Deletes a party
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @returns {object} JSON API Response
+  */
+  deleteParty(req, res) {
+    let partyIndex;
+
+    parties.forEach((party) => {
+      if (party.id === parseInt(req.params.id, 10)) {
+        partyIndex = parties.indexOf(party);
+      }
+    });
+    parties.splice(partyIndex, 1);
+
+    return res.status(200).send({
+      status: 200,
+      data: [{
+        message: `Course with id: ${req.params.id} successfully deleted`,
       }],
     });
   }
