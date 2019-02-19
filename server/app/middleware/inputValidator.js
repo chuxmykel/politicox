@@ -1,5 +1,6 @@
 import Schema from './schema';
 import parties from '../model/parties';
+import offices from '../model/offices';
 
 /**
  * @class InputValidator
@@ -62,6 +63,40 @@ class InputValidator {
       return res.status(404).send({
         status: 404,
         error: `Party with id: ${req.params.id} does not exist`,
+      });
+    }
+    return next();
+  }
+
+  /**
+  * @method validateOfficeBody
+  * @description Validates the office object passed in from the request body
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @param {function} next - The next function to point to the next middleware
+  * @returns {function} next() - The next function
+  */
+  validateOfficeBody(req, res, next) {
+    const newOffice = { ...req.body };
+    const validate = Schema.createOfficeSchema(newOffice);
+    const { error } = validate;
+    let nameExists = false;
+
+    offices.forEach((office) => {
+      if (newOffice.name === office.name) { nameExists = true; }
+    });
+
+    if (nameExists) {
+      return res.status(400).send({
+        status: 400,
+        error: 'Office name already exists',
+      });
+    }
+
+    if (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.details[0].message,
       });
     }
     return next();

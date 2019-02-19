@@ -36,6 +36,22 @@ class Schema {
     };
     return Joi.validate(party, schema);
   }
+
+  /**
+  * @method createOfficeSchema
+  * @description Validates the Office object from a post request
+  * @param {object} office - The office object to be validated
+  * @returns {object} An object specifying weather the input was valid or not.
+  */
+  createOfficeSchema(office) {
+    const schema = {
+      type: Joi.string().min(5).max(50).required()
+        .regex(/^[a-zA-Z0-9]+[a-zA-Z\s]+$/),
+      name: Joi.string().min(2).max(50).required()
+        .regex(/^[a-zA-Z0-9]+[a-zA-Z\s]+$/),
+    };
+    return Joi.validate(office, schema);
+  }
 }
 
 const schema = new Schema();
