@@ -155,7 +155,7 @@ describe('Party Routes', () => {
       const input = {
         name: 'andela',
       };
-      const id = 20;
+      const id = 200;
       chai.request(server)
         .patch(`${partyEndPoint}${id}/name`)
         .send(input)
