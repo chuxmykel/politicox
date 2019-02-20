@@ -8,10 +8,11 @@
     "clean": "rm -rf build && mkdir build",
     "build-server": "babel -d ./build ./server",
     "build": "npm run clean && npm run build-server",
-    "start": "npm run build && node ./build/server.js",
+    "start": "node ./build/server.js",
     "start:dev": "npm run build && npm run start",
     "dev": "nodemon --exec babel-node server/server.js",
-    "nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "heroku-postbuild": "npm run build"
   },
   "repository": {
     "type": "git",
