@@ -1,4 +1,4 @@
-import parties from '../model/parties';
+import db from '../model/db';
 
 /**
  * @class PartyController
@@ -8,97 +8,149 @@ import parties from '../model/parties';
 class PartyController {
   /**
   * @method addParty
-  * @description Adds a party to the data structure
+  * @description Adds a party to the database
   * @param {object} req - The Request Object
   * @param {object} res - The Response Object
   * @returns {object} JSON API Response
   */
-  addParty(req, res) {
-    const party = { id: parties[parties.length - 1].id + 1, ...req.body };
+  async addParty(req, res) {
+    const queryText = 'INSERT INTO parties(name, hqAddress, logoUrl) VALUES($1, $2, $3) returning *';
+    const party = { ...req.body };
+    const values = [party.name, party.hqAddress, party.logoUrl];
 
-    parties.push(party);
-    return res.status(201).send({
-      status: 201,
-      data: [{
-        id: party.id,
-        name: party.name,
-      }],
-    });
+    try {
+      const response = await db.query(queryText, values);
+      return res.status(201).send({
+        status: 200,
+        data: response.rows[0],
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.detail,
+      });
+    }
   }
 
   /**
-  * @method getAllParties
-  * @description Gets all the parties
-  * @param {object} req - The Request Object
-  * @param {object} res - The Response Object
-  * @returns {object} JSON API Response
-  */
-  getAllParties(req, res) {
-    return res.status(200).send({
-      status: 201,
-      data: parties,
-    });
+   * @method getAllParties
+   * @description Fetches all the parties from the database
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+  async getAllParties(req, res) {
+    const queryText = 'SELECT * FROM parties ORDER BY id ASC';
+    try {
+      const { rows } = await db.query(queryText);
+      return res.status(200).send({
+        status: 200,
+        data: rows,
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.detail,
+      });
+    }
   }
 
   /**
-  * @method getSpecificParty
-  * @description Gets a specified party
-  * @param {object} req - The Request Object
-  * @param {object} res - The Response Object
-  * @returns {object} JSON API Response
-  */
-  getSpecificParty(req, res) {
-    const partyIndex = parseInt(req.params.id, 10) - 1;
+   * @method getSpecificPartiy
+   * @description Fetches a specific party from the database
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+  async getSpecificParty(req, res) {
+    const queryText = 'SELECT * FROM parties WHERE id = $1';
+    try {
+      const { rows } = await db.query(queryText, [req.params.id]);
 
-    return res.status(200).send({
-      status: 201,
-      data: parties[partyIndex],
-    });
-  }
-
-  /**
-  * @method editParty
-  * @description Edits a party
-  * @param {object} req - The Request Object
-  * @param {object} res - The Response Object
-  * @returns {object} JSON API Response
-  */
-  editParty(req, res) {
-    const partyIndex = parseInt(req.params.id, 10) - 1;
-    parties[partyIndex].name = req.body.name;
-
-    return res.status(200).send({
-      status: 200,
-      data: [{
-        id: parties[partyIndex].id,
-        name: parties[partyIndex].name,
-      }],
-    });
-  }
-
-  /**
-  * @method deleteParty
-  * @description Deletes a party
-  * @param {object} req - The Request Object
-  * @param {object} res - The Response Object
-  * @returns {object} JSON API Response
-  */
-  deleteParty(req, res) {
-    let partyIndex;
-
-    parties.forEach((party) => {
-      if (party.id === parseInt(req.params.id, 10)) {
-        partyIndex = parties.indexOf(party);
+      if (!rows[0]) {
+        return res.status(404).send({
+          status: 404,
+          error: `Party with id: ${req.params.id} does not exist`,
+        });
       }
-    });
-    parties.splice(partyIndex, 1);
+      return res.status(200).send({
+        status: 200,
+        data: rows,
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.detail,
+      });
+    }
+  }
 
-    return res.status(200).send({
-      status: 200,
-      data: [{
-        message: `Course with id: ${req.params.id} successfully deleted`,
-      }],
-    });
+  /**
+   * @method editParty
+   * @description Updates the name of a party
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+  async editParty(req, res) {
+    const findQuery = 'SELECT * FROM parties WHERE id=$1';
+    const updateQuery = 'UPDATE parties SET name = $1 WHERE id = $2 returning *';
+    try {
+      const { rows } = await db.query(findQuery, [req.params.id]);
+
+      if (!rows[0]) {
+        return res.status(404).send({
+          status: 404,
+          error: `Party with id: ${req.params.id} does not exist`,
+        });
+      }
+      const values = [
+        req.body.name,
+        req.params.id
+      ];
+      const response = await db.query(updateQuery, values);
+
+      return res.status(200).send({
+        status: 200,
+        data: response.rows[0],
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.detail,
+      });
+    }
+  }
+
+  /**
+   * @method deleteParty
+   * @description Deletes a party from the database
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+  async deleteParty(req, res) {
+    const deleteQuery = 'DELETE FROM parties WHERE id=$1 returning *';
+
+    try {
+      const response = await db.query(deleteQuery, [req.params.id]);
+
+      if (!response.rows[0]) {
+        return res.status(404).send({
+          status: 404,
+          error: `Party with id: ${req.params.id} does not exist`,
+        });
+      }
+      return res.status(200).send({
+        status: 200,
+        data: [{ message: `Party with id: ${req.params.id} deleted successfully` }]
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.detail,
+      });
+    }
   }
 }
 

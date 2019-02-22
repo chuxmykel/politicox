@@ -104,7 +104,7 @@ describe('Party Routes', () => {
 
   describe(`GET ${partyEndPoint}id`, () => {
     it('Should have 200 as status code if single party retrival worked', (done) => {
-      const id = 3;
+      const id = 1;
       chai.request(server)
         .get(`${partyEndPoint}${id}`)
         .end((err, res) => {
@@ -245,7 +245,7 @@ describe('Office Tests', () => {
 
   describe(`GET ${officeEndPoint}id`, () => {
     it('Should have 200 as status code if single office retrival worked', (done) => {
-      const id = 3;
+      const id = 1;
       chai.request(server)
         .get(`${officeEndPoint}${id}`)
         .end((err, res) => {
