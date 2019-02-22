@@ -1,4 +1,4 @@
-import offices from '../model/offices';
+import db from '../model/db';
 
 /**
  * @class OfficeController
@@ -8,51 +8,81 @@ import offices from '../model/offices';
 class OfficeController {
   /**
   * @method addOffice
-  * @description Adds an office to the data structure
+  * @description Adds an office to the database
   * @param {object} req - The Request Object
   * @param {object} res - The Response Object
   * @returns {object} JSON API Response
   */
-  addOffice(req, res) {
-    const office = { id: offices[offices.length - 1].id + 1, ...req.body };
+  async addOffice(req, res) {
+    const queryText = 'INSERT INTO offices(type, name) VALUES($1, $2) returning *';
+    const office = { ...req.body };
+    const values = [office.type, office.name];
 
-    offices.push(office);
-    return res.status(201).send({
-      status: 201,
-      data: [
-        offices[offices.length - 1],
-      ],
-    });
+    try {
+      const response = await db.query(queryText, values);
+      return res.status(201).send({
+        status: 200,
+        data: response.rows[0],
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.detail,
+      });
+    }
   }
 
   /**
-  * @method getAllOffices
-  * @description Gets all the offices
-  * @param {object} req - The Request Object
-  * @param {object} res - The Response Object
-  * @returns {object} JSON API Response
-  */
-  getAllOffices(req, res) {
-    return res.status(200).send({
-      status: 201,
-      data: offices,
-    });
+   * @method getAllOffices
+   * @description Fetches all offices from the database
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+  async getAllOffices(req, res) {
+    const queryText = 'SELECT * FROM offices ORDER BY id ASC';
+    try {
+      const { rows } = await db.query(queryText);
+      return res.status(200).send({
+        status: 200,
+        data: rows,
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.detail,
+      });
+    }
   }
 
   /**
-  * @method getSpecificOffice
-  * @description Gets a specified Office
-  * @param {object} req - The Request Object
-  * @param {object} res - The Response Object
-  * @returns {object} JSON API Response
-  */
-  getSpecificOffice(req, res) {
-    const officeIndex = parseInt(req.params.id, 10) - 1;
+   * @method getSpecificOffice
+   * @description Fetches a specific office from the database
+   * @param {object} req - The Request Object
+   * @param {object} res - The Response Object
+   * @returns {object} JSON API Response
+   */
+  async getSpecificOffice(req, res) {
+    const queryText = 'SELECT * FROM offices WHERE id = $1';
+    try {
+      const { rows } = await db.query(queryText, [req.params.id]);
 
-    return res.status(200).send({
-      status: 201,
-      data: offices[officeIndex],
-    });
+      if (!rows[0]) {
+        return res.status(404).send({
+          status: 404,
+          error: `Office with id: ${req.params.id} does not exist`,
+        });
+      }
+      return res.status(200).send({
+        status: 200,
+        data: rows,
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.detail,
+      });
+    }
   }
 }
 
