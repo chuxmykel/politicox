@@ -11,7 +11,19 @@ const createOfficeTable = `
     type VARCHAR(60),
     name VARCHAR(60) );`;
 
+const createUserTable = `
+  CREATE TABLE users(
+    id SERIAL PRIMARY KEY,
+    firstname VARCHAR(15),
+    lastname VARCHAR(15), 
+    othername VARCHAR(15),
+    email VARCHAR(100) UNIQUE,
+    phoneNumber VARCHAR(15) UNIQUE,
+    password VARCHAR(200),
+    passportUrl VARCHAR(200),
+    isAdmin BOOLEAN DEFAULT FALSE );`;
 
-const createTables = `${createPartyTable}${createOfficeTable}`;
+
+const createTables = `${createPartyTable}${createOfficeTable}${createUserTable}`;
 
 export default createTables;

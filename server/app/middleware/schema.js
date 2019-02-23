@@ -52,6 +52,27 @@ class Schema {
     };
     return Joi.validate(office, schema);
   }
+
+  /**
+  * @method createUserSchema
+  * @description Validates the user object from a post request
+  * @param {object} user - The user object to be validated
+  * @returns {object} An object specifying weather the input was valid or not.
+  */
+  createUserSchema(user) {
+    const schema = {
+      firstname: Joi.string().min(2).max(12).required()
+        .regex(/^[a-zA-Z]+$/),
+      lastname: Joi.string().min(2).max(12).required()
+        .regex(/^[a-zA-Z]+$/),
+      othername: Joi.string().min(2).max(12).regex(/^[a-zA-Z]+$/),
+      email: Joi.string().email({ minDomainAtoms: 2 }).required(),
+      phoneNumber: Joi.string().min(8).max(15).regex(/^[0-9+]?[0-9]+[0-9-]+$/),
+      passportUrl: Joi.string().min(5).max(200).optional(),
+      password: Joi.string().min(5).max(30).required(),
+    };
+    return Joi.validate(user, schema);
+  }
 }
 
 const schema = new Schema();

@@ -14,14 +14,14 @@ class PartyController {
   * @returns {object} JSON API Response
   */
   async addParty(req, res) {
-    const queryText = 'INSERT INTO parties(name, hqAddress, logoUrl) VALUES($1, $2, $3) returning *';
+    const queryText = 'INSERT INTO parties(name, hqAddress, logoUrl) VALUES($1, $2, $3) RETURNING *;';
     const party = { ...req.body };
     const values = [party.name, party.hqAddress, party.logoUrl];
 
     try {
       const response = await db.query(queryText, values);
       return res.status(201).send({
-        status: 200,
+        status: 201,
         data: response.rows[0],
       });
     } catch (error) {
