@@ -10,6 +10,7 @@ const homeEndPoint = '/';
 const apiEndPoint = '/api/v1/';
 const partyEndPoint = `${apiEndPoint}parties/`;
 const officeEndPoint = `${apiEndPoint}offices/`;
+const userEndPoint = `${apiEndPoint}auth/`;
 
 describe('Home Routes', () => {
   describe(`GET ${homeEndPoint}`, () => {
@@ -260,6 +261,139 @@ describe('Office Tests', () => {
         .get(`${officeEndPoint}${id}`)
         .end((err, res) => {
           res.should.have.status(404);
+          done();
+        });
+    });
+  });
+});
+
+describe('User Auth Tests', () => {
+  describe(`POST ${userEndPoint}signup`, () => {
+    it('Should return 201 if user creation works', (done) => {
+      const user = {
+        firstname: 'Chukwudi',
+        lastname: 'Ngwobia',
+        othername: 'Mike',
+        email: 'coolemail@testmail.com',
+        phoneNumber: '07001234567',
+        passportUrl: 'http://passport.url/andELa41',
+        password: 'pA55w0rd',
+      };
+      chai.request(server)
+        .post(`${userEndPoint}signup`)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(201);
+          done();
+        });
+    });
+
+    it('Should return 400 if firstname is ommited', (done) => {
+      const user = {
+        lastname: 'Ngwobia',
+        othername: 'Mike',
+        email: 'coolemail1@testmail.com',
+        phoneNumber: '07001234568',
+        passportUrl: 'http://passport.url/andELa41',
+        password: 'pA55w0rd',
+      };
+      chai.request(server)
+        .post(`${userEndPoint}signup`)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if lastname is ommited', (done) => {
+      const user = {
+        firstname: 'Chukwudi',
+        othername: 'Mike',
+        email: 'coolemail2@testmail.com',
+        phoneNumber: '07001234569',
+        passportUrl: 'http://passport.url/andELa41',
+        password: 'pA55w0rd',
+      };
+      chai.request(server)
+        .post(`${userEndPoint}signup`)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if email is ommited', (done) => {
+      const user = {
+        firstname: 'Chukwudi',
+        lastname: 'Ngwobia',
+        othername: 'Mike',
+        phoneNumber: '07001234560',
+        passportUrl: 'http://passport.url/andELa41',
+        password: 'pA55w0rd',
+      };
+      chai.request(server)
+        .post(`${userEndPoint}signup`)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if email already exists', (done) => {
+      const user = {
+        firstname: 'Chukwudi',
+        lastname: 'Ngwobia',
+        othername: 'Mike',
+        email: 'coolemail@testmail.com',
+        phoneNumber: '07001234561',
+        passportUrl: 'http://passport.url/andELa41',
+        password: 'pA55w0rd',
+      };
+      chai.request(server)
+        .post(`${userEndPoint}signup`)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if phone number already exists', (done) => {
+      const user = {
+        firstname: 'Chukwudi',
+        lastname: 'Ngwobia',
+        othername: 'Mike',
+        email: 'coolemail4@testmail.com',
+        phoneNumber: '07001234567',
+        passportUrl: 'http://passport.url/andELa41',
+        password: 'pA55w0rd',
+      };
+      chai.request(server)
+        .post(`${userEndPoint}signup`)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if password is ommited', (done) => {
+      const user = {
+        firstname: 'Chukwudi',
+        lastname: 'Ngwobia',
+        othername: 'Mike',
+        email: 'coolemail5@testmail.com',
+        phoneNumber: '07001234562',
+        passportUrl: 'http://passport.url/andELa41',
+      };
+      chai.request(server)
+        .post(`${userEndPoint}signup`)
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400);
           done();
         });
     });

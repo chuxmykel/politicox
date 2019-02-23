@@ -7,14 +7,14 @@ import Schema from './schema';
  */
 class InputValidator {
   /**
-  * @method validatePartyBody
+  * @method validateParty
   * @description Validates the party object passed in from the request body
   * @param {object} req - The Request Object
   * @param {object} res - The Response Object
   * @param {function} next - The next function to point to the next middleware
   * @returns {function} next() - The next function
   */
-  validatePartyBody(req, res, next) {
+  validateParty(req, res, next) {
     const party = { ...req.body };
     const validate = req.method === 'POST' ? Schema.createPartySchema(party)
       : Schema.editPartySchema(party);
@@ -30,16 +30,38 @@ class InputValidator {
   }
 
   /**
-  * @method validateOfficeBody
+  * @method validateOffice
   * @description Validates the office object passed in from the request body
   * @param {object} req - The Request Object
   * @param {object} res - The Response Object
   * @param {function} next - The next function to point to the next middleware
   * @returns {function} next() - The next function
   */
-  validateOfficeBody(req, res, next) {
+  validateOffice(req, res, next) {
     const office = { ...req.body };
     const validate = Schema.createOfficeSchema(office);
+    const { error } = validate;
+
+    if (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.details[0].message,
+      });
+    }
+    return next();
+  }
+
+  /**
+  * @method validateUser
+  * @description Validates the user object passed in from the request body
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @param {function} next - The next function to point to the next middleware
+  * @returns {function} next() - The next function
+  */
+  validateUser(req, res, next) {
+    const user = { ...req.body };
+    const validate = Schema.createUserSchema(user);
     const { error } = validate;
 
     if (error) {

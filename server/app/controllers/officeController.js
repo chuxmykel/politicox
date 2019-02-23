@@ -2,7 +2,7 @@ import db from '../model/db';
 
 /**
  * @class OfficeController
- * @description Contains methods for each party related endpoint
+ * @description Contains methods for each office related endpoint
  * @exports officeController
  */
 class OfficeController {
@@ -14,14 +14,14 @@ class OfficeController {
   * @returns {object} JSON API Response
   */
   async addOffice(req, res) {
-    const queryText = 'INSERT INTO offices(type, name) VALUES($1, $2) returning *';
+    const queryText = 'INSERT INTO offices(type, name) VALUES($1, $2) RETURNING *;';
     const office = { ...req.body };
     const values = [office.type, office.name];
 
     try {
       const response = await db.query(queryText, values);
       return res.status(201).send({
-        status: 200,
+        status: 201,
         data: response.rows[0],
       });
     } catch (error) {
