@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import express from 'express';
 import InputValidator from '../middleware/inputValidator';
 import PartyController from '../controllers/partyController';
