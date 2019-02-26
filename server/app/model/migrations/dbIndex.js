@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { Pool } from 'pg';
 import createTableQuery from './createTables';
 import dropTableQuery from './dropTables';
+import seed from './seed';
 
 dotenv.config();
 
@@ -50,6 +51,24 @@ const dropTables = () => {
     });
 };
 
+/**
+  * @method seedTables
+  * @description Populates the created tables
+  * @param {empty} none - Takes no parameters
+  * @returns {promise} a promise
+  */
+const seedTables = () => {
+  pool.query(seed)
+    .then((res) => {
+      console.log(res);
+      pool.end();
+    })
+    .catch((err) => {
+      console.log(err);
+      pool.end();
+    });
+};
+
 pool.on('remove', () => {
   console.log('client removed');
   process.exit(0);
@@ -57,7 +76,8 @@ pool.on('remove', () => {
 
 module.exports = {
   createTables,
-  dropTables
+  dropTables,
+  seedTables
 };
 
 require('make-runnable');

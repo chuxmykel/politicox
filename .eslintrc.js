@@ -15,6 +15,7 @@ module.exports = {
         "no-param-reassign": 0,
         "comma-dangle": 0,
         "no-console": 0,
+        "no-shadow": 0,
         "curly": ["error", "multi-line"],
         "import/no-unresolved": [2, { "commonjs": true }],
         "no-shadow": ["error", { "allow": ["req", "res", "err"] }],

@@ -4,6 +4,7 @@ import InputValidator from '../middleware/inputValidator';
 import PartyController from '../controllers/partyController';
 import OfficeController from '../controllers/officeController';
 import UserController from '../controllers/userController';
+import AuthenticateUser from '../middleware/authenticateUser';
 
 
 const router = express.Router();
@@ -19,18 +20,29 @@ router.get(homeEndPoint, (req, res) => res.status(200).redirect(apiEndPoint));
 router.get(apiEndPoint, (req, res) => res.status(200).send('Welcome to politicox'));
 
 // Party
-router.post(partyEndPoint, InputValidator.validateParty, PartyController.addParty);
-router.get(partyEndPoint, PartyController.getAllParties);
-router.get(`${partyEndPoint}:id`, PartyController.getSpecificParty);
-router.patch(`${partyEndPoint}:id/name`, InputValidator.validateParty, PartyController.editParty);
-router.delete(`${partyEndPoint}:id`, PartyController.deleteParty);
+router.post(partyEndPoint,
+  InputValidator.validateParty,
+  AuthenticateUser.verifyAdmin, PartyController.addParty);
+
+router.get(partyEndPoint, AuthenticateUser.verifyUser, PartyController.getAllParties);
+router.get(`${partyEndPoint}:id`, AuthenticateUser.verifyUser, PartyController.getSpecificParty);
+
+router.patch(`${partyEndPoint}:id/name`,
+  InputValidator.validateParty,
+  AuthenticateUser.verifyAdmin, PartyController.editParty);
+
+router.delete(`${partyEndPoint}:id`, PartyController.deleteParty);// admin
 
 // Office
-router.post(officeEndPoint, InputValidator.validateOffice, OfficeController.addOffice);
-router.get(officeEndPoint, OfficeController.getAllOffices);
-router.get(`${officeEndPoint}:id`, OfficeController.getSpecificOffice);
+router.post(officeEndPoint,
+  InputValidator.validateOffice,
+  AuthenticateUser.verifyAdmin, OfficeController.addOffice);
+
+router.get(officeEndPoint, AuthenticateUser.verifyUser, OfficeController.getAllOffices);
+router.get(`${officeEndPoint}:id`, AuthenticateUser.verifyUser, OfficeController.getSpecificOffice);
 
 // User
 router.post(`${userEndPoint}signup`, InputValidator.validateUser, UserController.signUp);
+router.post(`${userEndPoint}login`, InputValidator.validateLogin, UserController.signIn);
 
 export default router;

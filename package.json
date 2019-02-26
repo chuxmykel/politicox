@@ -4,7 +4,7 @@
   "description": "An attempt at building a better politico app",
   "main": "index.js",
   "scripts": {
-    "test": "export NODE_ENV=test && npm run clean-db && mocha server/test/test.js --require @babel/register --require @babel/polyfill --exit",
+    "test": "export NODE_ENV=test && npm run migration && mocha server/test/test.js --require @babel/register --require @babel/polyfill --exit",
     "clean": "rm -rf build && mkdir build",
     "build-server": "babel -d ./build ./server",
     "build": "npm run clean && npm run build-server",
@@ -13,7 +13,7 @@
     "dev": "nodemon --exec babel-node server/server.js",
     "nyc": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "heroku-postbuild": "npm run build",
-    "clean-db": "babel-node server/app/model/dbIndex dropTables && babel-node server/app/model/dbIndex createTables"
+    "migration": "babel-node server/app/model/migrations/dbIndex dropTables && babel-node server/app/model/migrations/dbIndex createTables && babel-node server/app/model/migrations/dbIndex seedTables"
   },
   "repository": {
     "type": "git",
