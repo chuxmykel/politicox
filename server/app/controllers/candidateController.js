@@ -15,7 +15,7 @@ class CandidateController {
   */
   async registerCandidate(req, res) {
     const queryText1 = 'SELECT * FROM users WHERE id = $1';
-    const queryText2 = `INSERT INTO candidates ("user", party, office) 
+    const queryText2 = `INSERT INTO candidates (candidate, party, office) 
     VALUES ($1, $2, $3) RETURNING *;`;
 
     try {
