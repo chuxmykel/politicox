@@ -31,8 +31,8 @@ const createCandidateTable = `
     id SERIAL,
     office INTEGER REFERENCES offices(id),
     party INTEGER REFERENCES parties(id),
-    "user" INTEGER UNIQUE REFERENCES users(id), 
-    PRIMARY KEY ("user", office) 
+    candidate INTEGER UNIQUE REFERENCES users(id), 
+    PRIMARY KEY (candidate, office) 
   );`;
 
 
