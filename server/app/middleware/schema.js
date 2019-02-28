@@ -24,7 +24,7 @@ class Schema {
   }
 
   /**
-  * @method eidtPartySchema
+  * @method editPartySchema
   * @description Validates the party object from a patch patch
   * @param {object} party - The party object to be validated
   * @returns {object} An object specifying weather the input was valid or not.
@@ -75,7 +75,7 @@ class Schema {
   }
 
   /**
-  * @method createUserSchema
+  * @method loginSchema
   * @description Validates the login details from a post request
   * @param {object} login - The login object to be validated
   * @returns {object} An object specifying weather the input was valid or not.
@@ -86,6 +86,20 @@ class Schema {
       password: Joi.string().min(5).max(30).required(),
     };
     return Joi.validate(login, schema);
+  }
+
+  /**
+  * @method candidateSchema
+  * @description Validates the details of a candidate from a post request
+  * @param {object} details - The details of the candidate to be validated
+  * @returns {object} An object specifying weather the input was valid or not.
+  */
+  candidateSchema(details) {
+    const schema = {
+      party: Joi.number().integer().min(1).required(),
+      office: Joi.number().integer().min(1).required(),
+    };
+    return Joi.validate(details, schema);
   }
 }
 
