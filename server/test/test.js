@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../server';
@@ -555,22 +554,46 @@ describe('Party Routes', () => {
 
   describe(`DELETE ${partyEndPoint}id`, () => {
     it('Should return 200 on successful deletion of party', (done) => {
-      const id = 1;
+      const login = {
+        email: 'ngwobiachukwudi@gmail.com',
+        password: 'password'
+      };
+
       chai.request(server)
-        .delete(`${partyEndPoint}${id}`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          done();
+        .post(`${userEndPoint}login`)
+        .send(login)
+        .end((loginErr, loginRes) => {
+          const token = `Bearer ${loginRes.body.data[0].token}`;
+          const id = 1;
+          chai.request(server)
+            .delete(`${partyEndPoint}${id}`)
+            .set('Authorization', token)
+            .end((err, res) => {
+              res.should.have.status(200);
+              done();
+            });
         });
     });
 
     it('Should return 404 if party does not exist', (done) => {
-      const id = 50;
+      const login = {
+        email: 'ngwobiachukwudi@gmail.com',
+        password: 'password'
+      };
+
       chai.request(server)
-        .delete(`${partyEndPoint}${id}`)
-        .end((err, res) => {
-          res.should.have.status(404);
-          done();
+        .post(`${userEndPoint}login`)
+        .send(login)
+        .end((loginErr, loginRes) => {
+          const token = `Bearer ${loginRes.body.data[0].token}`;
+          const id = 50;
+          chai.request(server)
+            .delete(`${partyEndPoint}${id}`)
+            .set('Authorization', token)
+            .end((err, res) => {
+              res.should.have.status(404);
+              done();
+            });
         });
     });
   });
@@ -699,6 +722,120 @@ describe('Office Routes', () => {
               res.should.have.status(404);
               done();
             });
+        });
+    });
+  });
+});
+
+describe('Candidate Registration Route', () => {
+  const userId = '1';
+  describe(`POST ${apiEndPoint}office/:id/register`, () => {
+    it('Should return 201 if candidate registration/creation works', (done) => {
+      const login = {
+        email: 'ngwobiachukwudi@gmail.com',
+        password: 'password'
+      };
+
+      chai.request(server)
+        .post(`${userEndPoint}login`)
+        .send(login)
+        .end((loginErr, loginRes) => {
+          const token = `Bearer ${loginRes.body.data[0].token}`;
+
+          const candidate = {
+            office: '1',
+            party: '2',
+          };
+          chai.request(server)
+            .post(`${apiEndPoint}office/${userId}/register`)
+            .set('Authorization', token)
+            .send(candidate)
+            .end((err, res) => {
+              res.should.have.status(201);
+              done();
+            });
+        });
+    });
+
+    it('Should have 404 as status code if user not found', (done) => {
+      const login = {
+        email: 'ngwobiachukwudi@gmail.com',
+        password: 'password'
+      };
+
+      chai.request(server)
+        .post(`${userEndPoint}login`)
+        .send(login)
+        .end((loginErr, loginRes) => {
+          const token = `Bearer ${loginRes.body.data[0].token}`;
+          const id = 50;
+          const candidate = {
+            office: 1,
+            party: 1,
+          };
+
+          chai.request(server)
+            .post(`${apiEndPoint}office/${id}/register`)
+            .set('Authorization', token)
+            .send(candidate)
+            .end((err, res) => {
+              res.should.have.status(404);
+              done();
+            });
+        });
+    });
+
+    it('Should return 400 if office is missing', (done) => {
+      const candidate = {
+        party: 1,
+      };
+      chai.request(server)
+        .post(`${apiEndPoint}office/${userId}/register`)
+        .send(candidate)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if party is missing', (done) => {
+      const candidate = {
+        office: 1,
+      };
+      chai.request(server)
+        .post(`${apiEndPoint}office/${userId}/register`)
+        .send(candidate)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if wrong party format is entered', (done) => {
+      const candidate = {
+        party: 'halle',
+        office: 1,
+      };
+      chai.request(server)
+        .post(`${apiEndPoint}office/${userId}/register`)
+        .send(candidate)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if wrong party format is entered', (done) => {
+      const candidate = {
+        party: 1,
+        office: 'draw',
+      };
+      chai.request(server)
+        .post(`${apiEndPoint}office/${userId}/register`)
+        .send(candidate)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
         });
     });
   });

@@ -94,6 +94,28 @@ class InputValidator {
     }
     return next();
   }
+
+  /**
+  * @method validateCandidtate
+  * @description Validates the candidates
+  * @param {object} req - The Request Object
+  * @param {object} res - The Response Object
+  * @param {function} next - The next function to point to the next middleware
+  * @returns {function} next() - The next function
+  */
+  validateCandidate(req, res, next) {
+    const details = { ...req.body };
+    const validate = Schema.candidateSchema(details);
+    const { error } = validate;
+
+    if (error) {
+      return res.status(400).send({
+        status: 400,
+        error: error.details[0].message,
+      });
+    }
+    return next();
+  }
 }
 
 const inputValidator = new InputValidator();

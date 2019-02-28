@@ -30,7 +30,8 @@ class UserController {
       const response = await db.query(queryText, values);
       const user = response.rows[0];
       const {
-        id, firstname, lastname, othername, email, phonenumber, passporturl, isadmin
+        id, firstname: first, lastname: last,
+        othername: other, email: mail, phonenumber, passporturl, isadmin
       } = user;
 
       const payload = {
@@ -46,10 +47,10 @@ class UserController {
           token,
           user: {
             id,
-            firstname,
-            lastname,
-            othername,
-            email,
+            first,
+            last,
+            other,
+            mail,
             phonenumber,
             passporturl,
             isadmin
