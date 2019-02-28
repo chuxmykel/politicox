@@ -9,7 +9,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - nyc --reporter=lcov npm run test
+  - nyc npm test && nyc report --reporter=text-lcov | coveralls
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
