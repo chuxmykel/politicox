@@ -1,7 +1,7 @@
 import db from '../model/db';
 
 /**
- * @class candidateController
+ * @class CandidateController
  * @description Contains methods for each candidate related endpoint
  * @exports candidateController
  */
@@ -22,7 +22,6 @@ class CandidateController {
       const user = parseInt(req.params.id, 10);
       const { party, office } = req.body;
       const response1 = await db.query(queryText1, [user]);
-      const values = [user, party, office];
 
       if (response1.rowCount < 1) {
         return res.status(404).send({
@@ -31,15 +30,16 @@ class CandidateController {
         });
       }
 
+      const values = [user, party, office];
       const response2 = await db.query(queryText2, values);
 
-      const { user: newUser, office: newOffice } = response2.rows[0];
+      const { candidate, office: newOffice } = response2.rows[0];
 
       return res.status(201).send({
         status: 201,
         data: [{
-          newOffice,
-          newUser,
+          office: newOffice,
+          user: candidate,
         }],
       });
     } catch (error) {

@@ -101,6 +101,19 @@ class Schema {
     };
     return Joi.validate(details, schema);
   }
+
+  /**
+  * @method voteSchema
+  * @description Validates the details of a vote from a post request
+  * @param {object} vote - The vote object to be validated
+  * @returns {object} An object specifying weather the input was valid or not.
+  */
+  voteSchema(vote) {
+    const schema = {
+      candidate: Joi.number().integer().min(1).required()
+    };
+    return Joi.validate(vote, schema);
+  }
 }
 
 const schema = new Schema();
