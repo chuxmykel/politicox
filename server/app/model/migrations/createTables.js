@@ -1,4 +1,4 @@
-const createPartyTable = `
+const createPartiesTable = `
   CREATE TABLE parties(
     id SERIAL PRIMARY KEY,
     name VARCHAR(25) UNIQUE,
@@ -6,14 +6,14 @@ const createPartyTable = `
     logoUrl VARCHAR(200) 
   );`;
 
-const createOfficeTable = `
+const createOfficesTable = `
   CREATE TABLE offices(
     id SERIAL PRIMARY KEY,
     type VARCHAR(60),
     name VARCHAR(60) 
   );`;
 
-const createUserTable = `
+const createUsersTable = `
   CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     firstname VARCHAR(15),
@@ -26,7 +26,7 @@ const createUserTable = `
     isAdmin BOOLEAN DEFAULT FALSE 
   );`;
 
-const createCandidateTable = `
+const createCandidatesTable = `
   CREATE TABLE candidates(
     id SERIAL,
     office INTEGER REFERENCES offices(id),
@@ -35,7 +35,18 @@ const createCandidateTable = `
     PRIMARY KEY (candidate, office) 
   );`;
 
+const createVotesTable = `
+  CREATE TABLE votes(
+    id SERIAL,
+    createdOn DATE,
+    createdBy INTEGER REFERENCES users(id),
+    office INTEGER REFERENCES offices(id),
+    candidate INTEGER REFERENCES candidates(candidate),
+    PRIMARY KEY (createdBy, office) 
+    );`;
 
-const createTables = `${createPartyTable}${createOfficeTable}${createUserTable}${createCandidateTable}`;
+
+const createTables = `${createPartiesTable}${createOfficesTable}
+  ${createUsersTable}${createCandidatesTable}${createVotesTable}`;
 
 export default createTables;

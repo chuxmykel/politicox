@@ -6,6 +6,7 @@ import UserController from '../controllers/userController';
 import PartyController from '../controllers/partyController';
 import OfficeController from '../controllers/officeController';
 import CandidateController from '../controllers/candidateController';
+import VoteController from '../controllers/voteController';
 
 
 const router = express.Router();
@@ -16,16 +17,17 @@ const userEndPoint = `${apiEndPoint}auth/`;
 const partyEndPoint = `${apiEndPoint}parties/`;
 const officeEndPoint = `${apiEndPoint}offices/`;
 const candidateEndpoint = `${apiEndPoint}office/:id/register/`;
+const voteEndpoint = `${apiEndPoint}votes`;
 
 // Home
 router.get(homeEndPoint, (req, res) => res.status(200).redirect(apiEndPoint));
 router.get(apiEndPoint, (req, res) => res.status(200).send('Welcome to politicox'));
 
-// User
+// Users
 router.post(`${userEndPoint}signup`, InputValidator.validateUser, UserController.signUp);
 router.post(`${userEndPoint}login`, InputValidator.validateLogin, UserController.signIn);
 
-// Party
+// Parties
 router.post(partyEndPoint,
   InputValidator.validateParty,
   AuthenticateUser.verifyAdmin, PartyController.addParty);
@@ -39,7 +41,7 @@ router.patch(`${partyEndPoint}:id/name`,
 
 router.delete(`${partyEndPoint}:id`, AuthenticateUser.verifyAdmin, PartyController.deleteParty);
 
-// Office
+// Offices
 router.post(officeEndPoint,
   InputValidator.validateOffice,
   AuthenticateUser.verifyAdmin, OfficeController.addOffice);
@@ -47,9 +49,14 @@ router.post(officeEndPoint,
 router.get(officeEndPoint, AuthenticateUser.verifyUser, OfficeController.getAllOffices);
 router.get(`${officeEndPoint}:id`, AuthenticateUser.verifyUser, OfficeController.getSpecificOffice);
 
-// Candidate
+// Candidates
 router.post(candidateEndpoint,
   InputValidator.validateCandidate,
   AuthenticateUser.verifyAdmin, CandidateController.registerCandidate);
+
+// Votes
+router.post(voteEndpoint,
+  InputValidator.validateVote,
+  AuthenticateUser.verifyUser, VoteController.vote);
 
 export default router;

@@ -840,3 +840,84 @@ describe('Candidate Registration Route', () => {
     });
   });
 });
+
+describe('Vote Route', () => {
+  describe(`POST ${apiEndPoint}votes`, () => {
+    it('Should return 201 if user vote is created successfuly', (done) => {
+      const login = {
+        email: 'ngwobiachukwudi@gmail.com',
+        password: 'password'
+      };
+
+      chai.request(server)
+        .post(`${userEndPoint}login`)
+        .send(login)
+        .end((loginErr, loginRes) => {
+          const token = `Bearer ${loginRes.body.data[0].token}`;
+
+          const vote = {
+            candidate: 1,
+          };
+          chai.request(server)
+            .post(`${apiEndPoint}votes`)
+            .set('Authorization', token)
+            .send(vote)
+            .end((err, res) => {
+              res.should.have.status(201);
+              done();
+            });
+        });
+    });
+
+    it('Should have 404 as status code if candidate not found', (done) => {
+      const login = {
+        email: 'ngwobiachukwudi@gmail.com',
+        password: 'password'
+      };
+
+      chai.request(server)
+        .post(`${userEndPoint}login`)
+        .send(login)
+        .end((loginErr, loginRes) => {
+          const token = `Bearer ${loginRes.body.data[0].token}`;
+          const vote = {
+            candidate: 50,
+          };
+
+          chai.request(server)
+            .post(`${apiEndPoint}votes`)
+            .set('Authorization', token)
+            .send(vote)
+            .end((err, res) => {
+              res.should.have.status(404);
+              done();
+            });
+        });
+    });
+
+    it('Should return 400 if candidate info is missing', (done) => {
+      const vote = {
+      };
+      chai.request(server)
+        .post(`${apiEndPoint}votes`)
+        .send(vote)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('Should return 400 if wrong candidate format is entered', (done) => {
+      const vote = {
+        candidate: 'q',
+      };
+      chai.request(server)
+        .post(`${apiEndPoint}votes`)
+        .send(vote)
+        .end((err, res) => {
+          res.should.have.status(400);
+          done();
+        });
+    });
+  });
+});
