@@ -7,6 +7,7 @@ import PartyController from '../controllers/partyController';
 import OfficeController from '../controllers/officeController';
 import CandidateController from '../controllers/candidateController';
 import VoteController from '../controllers/voteController';
+import ResultController from '../controllers/resultController';
 
 
 const router = express.Router();
@@ -18,6 +19,7 @@ const partyEndPoint = `${apiEndPoint}parties/`;
 const officeEndPoint = `${apiEndPoint}offices/`;
 const candidateEndpoint = `${apiEndPoint}office/:id/register/`;
 const voteEndpoint = `${apiEndPoint}votes`;
+const resultEndPoint = `${apiEndPoint}office/:id/result`;
 
 // Home
 router.get(homeEndPoint, (req, res) => res.status(200).redirect(apiEndPoint));
@@ -58,5 +60,8 @@ router.post(candidateEndpoint,
 router.post(voteEndpoint,
   InputValidator.validateVote,
   AuthenticateUser.verifyUser, VoteController.vote);
+
+// Results
+router.get(resultEndPoint, AuthenticateUser.verifyUser, ResultController.getResult);
 
 export default router;
