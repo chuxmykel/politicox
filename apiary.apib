@@ -1,0 +1,184 @@
+FORMAT: 1A
+HOST: https://politicox.herokuapp.com/api/v1/
+
+# politicox
+
+Politico is a web platform for free and fair elections. It's a platform in which a user can vote and also declare interest to be voted for. 
+
+## Home [/]
+
+### Welcome Page [GET /]
+
++ Response 200 (application/json)
+
+        {
+            "message": "Welcome to politicox"
+        }
+
+## User Authentication [/auth]
+
+The User object has the following attributes
+
++ id - An integer representing the User's ID
++ firstname - A string representing the User's first name
++ lastname - A string representing the User's last name
++ othername - A string representing the User's other name
++ email - A string representing the User's email
++ phoneNumber - A string representing the User's phone number
++ passportUrl - A string representing the URL of the User's passport
++ isAdmin - A boolean value to show if the user has Admin rights or not
+
+### New User SignUp [POST /auth/signup]
+
+You may sign up using this action. It takes a JSON
+object containing user attributes.
+
++ Request (application/json)
+
+        {
+            "firstname": "Trial",
+            "lastname": "User",
+            "othername": "Details",
+            "email": "trial_user@gmail.com",
+            "phoneNumber": "07001234567",
+            "passportUrl": "https://passport.url",
+            "password": "password"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /auth/register
+
+    + Body
+
+            {
+                "status": 201,
+                "data": [
+                    {
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImlkIjo3LCJlbWFpbCI6InRyaWFsX3VzZXJAZ21haWwuY29tIiwiaXNhZG1pbiI6ZmFsc2V9LCJpYXQiOjE1NTE3NDMzNDcsImV4cCI6MTU1MTc0Njk0N30.NZ9a_wDLXYK7NW7o4rOm1uDb_CXPsHr1rY2_iCrF6jA",
+                        "user": {
+                            "id": 7,
+                            "first": "Trial",
+                            "last": "User",
+                            "other": "Details",
+                            "mail": "trial_user@gmail.com",
+                            "phonenumber": "07001234567",
+                            "passporturl": "https://passport.url",
+                            "isadmin": false
+                        }
+                    }
+                ]
+            }
+
++ Request (application/json)
+
+        {
+            "firstname": "",
+            "lastname": "User",
+            "othername": "Details",
+            "email": "trial_user@gmail.com",
+            "phoneNumber": "07001234567",
+            "passportUrl": "https://passport.url",
+            "password": "password"
+        }
+
++ Response 400 (application/json)
+
+    + Headers
+
+            Location: /auth/register
+
+    + Body
+
+            {
+                "status": 400,
+                "error": "\"firstname\" is not allowed to be empty"
+            }
+
++ Request (application/json)
+
+        {
+            "firstname": "Trial",
+            "lastname": "",
+            "othername": "Details",
+            "email": "trial_user@gmail.com",
+            "phoneNumber": "07001234567",
+            "passportUrl": "https://passport.url",
+            "password": "password"
+        }
+
++ Response 400 (application/json)
+
+    + Headers
+
+            Location: /auth/register
+
+    + Body
+
+            {
+                "status": 400,
+                "error": "\"lastname\" is not allowed to be empty"
+            }
+
++ Request (application/json)
+
+        {
+            "firstname": "Trial",
+            "lastname": "User",
+            "othername": "Details",
+            "email": "",
+            "phoneNumber": "07001234567",
+            "passportUrl": "https://passport.url",
+            "password": "password"
+        }
+
++ Response 400 (application/json)
+
+    + Headers
+
+            Location: /auth/register
+
+    + Body
+
+            {
+                "status": 400,
+                "error": "\"email\" is not allowed to be empty"
+            }
+
+### User Login [POST /auth/login]
+
++ Request (application/json) 
+
+        {
+            "email": "trial_user@gmail.com",
+            "password": "password"
+        }
+
++ Response 200 (application/json)
+
+    + Headers
+        
+            Location: /auth/login
+        
+    + Body
+            
+            {
+                "status": 200,
+                "data": [
+                    {
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZmlyc3RuYW1lIjoiVHJpYWwiLCJsYXN0bmFtZSI6IlVzZXIiLCJvdGhlcm5hbWUiOiJEZXRhaWxzIiwiZW1haWwiOiJ0cmlhbF91c2VyQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiMDcwMDEyMzQ1NjciLCJwYXNzcG9ydFVybCI6Imh0dHBzOi8vcGFzc3BvcnQudXJsIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU1MTc0NDI4NSwiZXhwIjoxNTUxNzQ3ODg1fQ.EljEIZmZW78YY1Zg6lzLykRMwT84xDgCi9ABVzfRQSc",
+                        "user": {
+                            "id": 7,
+                            "firstname": "Trial",
+                            "lastname": "User",
+                            "othername": "Details",
+                            "email": "trial_user@gmail.com",
+                            "phoneNumber": "07001234567",
+                            "passportUrl": "https://passport.url",
+                            "isAdmin": false
+                        }
+                    }
+                ]
+            }
