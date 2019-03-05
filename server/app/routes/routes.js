@@ -21,7 +21,6 @@ const candidateEndpoint = `${apiEndPoint}office/:id/register/`;
 const voteEndpoint = `${apiEndPoint}votes`;
 const resultEndPoint = `${apiEndPoint}office/:id/result`;
 
-router.all('*', (req, res) => res.status(404).json({ message: 'Sorry, We have no such endpoint' }));
 
 // Home
 router.get(homeEndPoint, (req, res) => res.status(200).redirect(apiEndPoint));
@@ -65,5 +64,8 @@ router.post(voteEndpoint,
 
 // Results
 router.get(resultEndPoint, AuthenticateUser.verifyUser, ResultController.getResult);
+
+// All Other Endpoints
+router.all('*', (req, res) => res.status(404).json({ message: 'Sorry, We have no such endpoint' }));
 
 export default router;
