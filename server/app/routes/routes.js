@@ -21,9 +21,10 @@ const candidateEndpoint = `${apiEndPoint}office/:id/register/`;
 const voteEndpoint = `${apiEndPoint}votes`;
 const resultEndPoint = `${apiEndPoint}office/:id/result`;
 
+
 // Home
 router.get(homeEndPoint, (req, res) => res.status(200).redirect(apiEndPoint));
-router.get(apiEndPoint, (req, res) => res.status(200).send('Welcome to politicox'));
+router.get(apiEndPoint, (req, res) => res.status(200).json({ message: 'Welcome to politicox' }));
 
 // Users
 router.post(`${userEndPoint}signup`, InputValidator.validateUser, UserController.signUp);
@@ -63,5 +64,8 @@ router.post(voteEndpoint,
 
 // Results
 router.get(resultEndPoint, AuthenticateUser.verifyUser, ResultController.getResult);
+
+// All Other Endpoints
+router.all('*', (req, res) => res.status(404).json({ message: 'Sorry, We have no such endpoint' }));
 
 export default router;
