@@ -23,7 +23,7 @@ jobs:
           name: test
           command: npm test
       - run:
-			    name: install nyc
+			    name: install-nyc
 					command: 'sudo npm install -g nyc'
       - run:
           name: code-coverage
