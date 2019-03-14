@@ -24,7 +24,7 @@ jobs:
           command: npm test
       - run:
           name: install-nyc
-					command: 'sudo npm install -g nyc'
+          command: 'sudo npm install -g nyc'
       - run:
           name: code-coverage
           command: './node_modules/.bin/nyc report --reporter=text-lcov'
