@@ -1,17 +1,15 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/mern-starter
     docker:
-      # specify the version you desire here
       - image: circleci/node:10.15.1
-
-    working_directory: ~/repo
-
+      - image: postgres:10
     steps:
       - checkout
       - run:
           name: update-npm
-          command: 'sudo npm install -g npm@latest'
+          command: 'sudo npm install -g npm@5'
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -21,10 +19,10 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run: # run tests
+      - run:
           name: test
           command: npm test
-      - run: # run coverage report
+      - run:
           name: code-coverage
           command: './node_modules/.bin/nyc report --reporter=text-lcov'
       - store_artifacts:
